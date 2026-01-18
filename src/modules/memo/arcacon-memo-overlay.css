@@ -1,0 +1,10 @@
+.arcacon-overlay.memo {
+  background: #2563eb;
+}
+
+.arcacon-memo-overlay svg {
+  width: 14px;
+  height: 14px;
+  fill: #2563eb;
+  display: block;
+}

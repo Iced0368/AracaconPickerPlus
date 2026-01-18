@@ -1,0 +1,27 @@
+/* arcacon-overlay가 있는 썸네일 hover 시 border-radius 변경 */
+.thumbnail-wrap:hover:has(.arcacon-overlay) {
+  border-top-right-radius: 0 !important;
+}
+.thumbnails {
+  padding-top: 0.5rem;
+}
+
+.option-combo-emoticon.visible {
+  visibility: visible;
+}
+
+.arcacon-overlay {
+  width: 16px;
+  height: 16px;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  border-top: none;
+}
+
+.content-hidden {
+  display: none;
+}

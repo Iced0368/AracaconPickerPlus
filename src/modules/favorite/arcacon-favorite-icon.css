@@ -1,0 +1,10 @@
+.arcacon-overlay.favorite {
+  background: #ef4444;
+}
+
+.arcacon-favorite-overlay svg {
+  width: 14px;
+  height: 14px;
+  fill: #ef4444;
+  display: block;
+}

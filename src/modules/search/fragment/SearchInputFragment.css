@@ -1,0 +1,39 @@
+.arcacon-search-input-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  transition: background 0.15s;
+}
+
+.arcacon-search-input-clear:hover svg circle {
+  fill: #d1d5db;
+}
+.arcacon-search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  height: 40px;
+  gap: 8px;
+}
+
+.arcacon-search-input {
+  height: 85% !important;
+  padding: 8px 12px 8px 12px;
+  padding-right: 28px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  outline: none;
+  box-sizing: border-box;
+  background: #fafbfc;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
