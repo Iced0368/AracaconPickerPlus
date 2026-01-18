@@ -1,6 +1,10 @@
 # ArcaconPickerPlus
 
-이 프로젝트는 아카라이브(https://arca.live/b) 아카콘(Arcacon) 관련 기능을 제공하는 웹 애플리케이션입니다. Vite와 React를 기반으로 개발되었습니다.
+이 프로젝트는 아카라이브(https://arca.live/b)의 아카콘(Arcacon) 관련 기능을 제공하는 Tampermonkey 확장 프로그램입니다. Vite와 React를 기반으로 개발되었습니다.
+
+## 설치
+
+https://greasyfork.org/ko/scripts/563084-%EC%95%84%EC%B9%B4%EC%BD%98-%ED%94%BD%EC%BB%A4-%ED%94%8C%EB%9F%AC%EC%8A%A4-arcacon-picker-plus
 
 ## 주요 기능
 

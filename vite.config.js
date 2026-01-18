@@ -11,9 +11,12 @@ export default defineConfig({
     monkey({
       entry: "src/main.jsx",
       userscript: {
-        icon: "https://vitejs.dev/logo.svg",
+        name: "아카콘 픽커 플러스(Arcacon Picker Plus)",
         namespace: "npm/vite-plugin-monkey",
         match: ["https://arca.live/*"],
+        description: "아카콘 기능 확장",
+        license: "MIT",
+        version: "0.8.0",
       },
     }),
   ],
