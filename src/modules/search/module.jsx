@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchView from "./view";
 import { useMultiState } from "../../hooks";
+import SearchController from "./controller";
 
 // 로컬스토리지 키
 const STORAGE_KEY = "arcacon-memo-map";
@@ -16,6 +17,7 @@ export default function SearchModule() {
   return (
     <>
       <SearchView keyword={keyword} getKeyword={getKeyword} setKeyword={setKeyword} memoMap={memoMap} />
+      <SearchController setKeyword={setKeyword} />
     </>
   );
 }
