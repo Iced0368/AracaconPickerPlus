@@ -11,6 +11,7 @@ export default defineConfig({
     monkey({
       entry: "src/main.jsx",
       userscript: {
+        icon: "https://raw.githubusercontent.com/Iced0368/AracaconPickerPlus/refs/heads/main/ap-plus-icon.svg",
         name: "아카콘 픽커 플러스(Arcacon Picker Plus)",
         namespace: "npm/vite-plugin-monkey",
         match: ["https://arca.live/*"],
