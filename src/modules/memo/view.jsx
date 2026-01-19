@@ -9,16 +9,17 @@ import useMemoStore from "../../stores/memo";
 
 import "./arcacon-memo-overlay.css";
 
-export default function MemoView({ memoVisible, currentMemo, openMemo, closeMemo, saveMemo, removeMemo }) {
+export default function MemoView({ memoVisible, currentMemoId, openMemo, closeMemo, saveMemo, removeMemo }) {
   const { getMemoById } = useMemoStore();
-  const thumbnailWraps = useElementStore((state) => state.thumbnailWraps);
+  const { thumbnailWraps } = useElementStore();
   const [memoText, setMemoText] = useState("");
 
   useEffect(() => {
-    if (memoVisible && currentMemo) {
-      setMemoText(currentMemo.text || "");
+    if (memoVisible && currentMemoId) {
+      const memo = getMemoById(currentMemoId);
+      setMemoText(memo?.text || "");
     }
-  }, [memoVisible, currentMemo]);
+  }, [memoVisible, currentMemoId]);
 
   const isMemoed = (id) => {
     return getMemoById(id) !== null;
@@ -35,12 +36,12 @@ export default function MemoView({ memoVisible, currentMemo, openMemo, closeMemo
           closeMemo();
         }}
         onSave={() => {
-          saveMemo(currentMemo, memoText);
+          saveMemo(currentMemoId, memoText);
           setMemoText("");
           closeMemo();
         }}
         onRemove={() => {
-          removeMemo(currentMemo);
+          removeMemo(currentMemoId);
           setMemoText("");
           closeMemo();
         }}
@@ -48,7 +49,7 @@ export default function MemoView({ memoVisible, currentMemo, openMemo, closeMemo
       {
         // 메모 아이콘 오버레이
         thumbnailWraps.map((node) => {
-          if (!node || !node.isConnected) return null;
+          if (!node) return null;
           const id = node.getAttribute("data-attachment-id");
           if (!isMemoed(id)) return null;
           const overlay = getOverlay(node);
