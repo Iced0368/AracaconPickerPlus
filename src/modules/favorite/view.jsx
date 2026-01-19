@@ -16,12 +16,8 @@ const STAR_SVG_DATA_URL =
   );
 
 export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }) {
-  const { favoriteItems, getFavoriteById } = useFavoriteStore();
-  const thumbnailWraps = useElementStore((state) => state.thumbnailWraps);
-
-  const isFavorite = (id) => {
-    return getFavoriteById(id) !== null;
-  };
+  const { favorites, isFavorite } = useFavoriteStore();
+  const { thumbnailWraps } = useElementStore();
 
   return (
     <>
@@ -36,7 +32,7 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
                 className="--package-wrap"
                 data-package-id={FAVORITE_PACKAGE_ID}
               >
-                <PackageContent id={FAVORITE_PACKAGE_ID} items={favoriteItems} title="즐겨찾기" />
+                <PackageContent items={favorites} title="즐겨찾기" />
               </FirstChildPortal>
             ),
         )
@@ -85,7 +81,7 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
       {
         // 즐겨찾기 아이콘 오버레이
         thumbnailWraps.map((node) => {
-          if (!node || !node.isConnected) return null;
+          if (!node) return null;
           const id = node.getAttribute("data-attachment-id");
           if (!isFavorite(id)) return null;
           const overlay = getOverlay(node);
