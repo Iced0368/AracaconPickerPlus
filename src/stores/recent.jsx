@@ -8,7 +8,7 @@ class FixedSizeQueue {
     this.queue = [];
   }
   push(item) {
-    const idx = this.queue.indexOf(item);
+    const idx = this.queue.findIndex((q) => q.id === item.id);
     if (idx !== -1) {
       this.queue.splice(idx, 1); // 기존 위치에서 제거
     }
@@ -40,6 +40,7 @@ const useRecentStore = create((set) => {
   };
 
   const addRecentItem = (item) => {
+    if (item.emoticonid <= 0) return; // 유효하지 않은 이모티콘ID는 무시
     recentQueue.push(item);
     localStorage.setItem(LOCAL_STORAGE_RECENT_DATA, JSON.stringify(recentQueue.items));
     set({});
