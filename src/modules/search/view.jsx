@@ -1,15 +1,13 @@
-import { useElementStore } from "../../stores";
+import { useElementStore, useMemoStore } from "../../stores";
 import { FirstChildPortal, PackageContent } from "../../core/fragment";
-import SearchInputFragment from "./fragment/SearchInputFragment";
-import { useDebounce, useMultiState } from "../../hooks";
-import useMemoStore from "../../stores/memo";
+import { useDebounce } from "../../hooks";
 import { SERACH_PACKAGE_ID } from "../../core/constants/config";
-import { createPortal } from "react-dom";
 
-export default function SearchView({ keyword, getKeyword, setKeyword, memoMap }) {
-  const pickers = useElementStore((state) => state.pickers);
+import SearchInputFragment from "./fragment/SearchInputFragment";
+
+export default function SearchView({ getInputValue, setInputValue, keyword, getKeyword, setKeyword }) {
+  const { pickers } = useElementStore();
   const { memoItems } = useMemoStore();
-  const { get: getInputValue, set: setInputValue } = useMultiState("");
 
   const updateKeyword = useDebounce(setKeyword, 300);
 
@@ -40,26 +38,25 @@ export default function SearchView({ keyword, getKeyword, setKeyword, memoMap })
         // 검색어 유무에 따라 콘텐츠 표시 여부 제어
         Object.entries(keyword).map(([uid, kw]) => {
           const picker = pickers.find((p) => p.uid === uid);
-          picker.content.classList.remove("content-hidden");
+          picker.content.classList.remove("search-only");
           if (!kw) return null;
           if (!picker) return null;
-          picker.content.classList.add("content-hidden");
+          picker.content.classList.add("search-only");
 
           const searchResult = memoItems.reduce((acc, item) => (item.text.includes(kw) ? [...acc, item] : acc), []);
-
-          const node = picker.mainArea.querySelector(".wrap");
-
-          return createPortal(
-            <div className="content" key={`arcacon-search-result-${uid}`}>
-              <div className="--package-wrap" data-package-id={SERACH_PACKAGE_ID}>
-                <PackageContent
-                  id={SERACH_PACKAGE_ID}
-                  title={`검색 결과: ${kw}, 총 ${searchResult.length}개`}
-                  items={searchResult.filter((item) => item !== null)}
-                />
-              </div>
-            </div>,
-            node,
+          return (
+            <FirstChildPortal
+              container={picker.content}
+              className="--package-wrap"
+              data-package-id={SERACH_PACKAGE_ID}
+              key={`arcacon-search-result-${uid}`}
+            >
+              <PackageContent
+                id={SERACH_PACKAGE_ID}
+                title={`검색 결과: ${kw}, 총 ${searchResult.length}개`}
+                items={searchResult}
+              />
+            </FirstChildPortal>
           );
         })
       }
