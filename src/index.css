@@ -10,6 +10,10 @@
   visibility: visible;
 }
 
+.--arcacon-not-found {
+  display: none;
+}
+
 .arcacon-overlay {
   width: 16px;
   height: 16px;
@@ -22,6 +26,7 @@
   border-top: none;
 }
 
-.content-hidden {
+.content.search-only > .package-wrap[data-package-id]:not([data-package-id="-2"]),
+.content.search-only > .--package-wrap[data-package-id]:not([data-package-id="-2"]) {
   display: none;
 }
