@@ -5,13 +5,12 @@ import "./overlay.css";
 
 // .arcaconPicker 요소를 감지해 store에 저장하는 컴포넌트
 export default function ThumbnailOverlay() {
-  const thumbnailWraps = useElementStore((state) => state.thumbnailWraps);
+  const { thumbnailWraps } = useElementStore();
 
   return (
     <>
       {thumbnailWraps.map((node) => {
         if (!node) return;
-        if (!node.getAttribute) return;
         // 부모에 position: relative 적용 (이미 있으면 무시)
         if (node.style.position === "" || node.style.position === "static") {
           node.style.position = "relative";
