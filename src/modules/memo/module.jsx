@@ -1,21 +1,25 @@
 import { useState, useCallback } from "react";
-import { useElementStore } from "../../stores";
+import { useArcaconStore, useMemoStore } from "../../stores";
+
 import MemoController from "./controller";
 import MemoView from "./view";
-import useMemoStore from "../../stores/memo";
+/*
+  [메모 모듈]
+  - 메모 기능을 추가
+  - 메모된 아카콘 오버레이 표시
+*/
 
 export default function MemoModule() {
-  const pickers = useElementStore((state) => state.pickers);
-
   const { getMemoById, setMemoItem, deleteMemoItem } = useMemoStore();
-  const [currentMemo, setCurrentMemo] = useState(null);
+  const { setPermanent } = useArcaconStore();
+  const [currentMemoId, setCurrentMemoId] = useState(null);
   const [memoVisible, setMemoVisible] = useState(false);
 
   // 메모 열기 (id 지정)
   const openMemo = useCallback(
-    (arcacon) => {
-      const memo = getMemoById(arcacon.id);
-      setCurrentMemo({ ...arcacon, text: memo?.text || "" });
+    (id) => {
+      const memo = getMemoById(id);
+      setCurrentMemoId(id);
       setMemoVisible(true);
     },
     [getMemoById],
@@ -23,30 +27,31 @@ export default function MemoModule() {
 
   // 메모 닫기
   const closeMemo = useCallback(() => {
-    setCurrentMemo(null);
+    setCurrentMemoId(null);
     setMemoVisible(false);
   }, []);
 
   // 메모 저장
-  const saveMemo = useCallback((arcacon, text) => {
+  const saveMemo = useCallback((id, text) => {
     if (!text) {
-      deleteMemoItem(arcacon.id);
+      deleteMemoItem(id);
       return;
     }
-    setMemoItem(arcacon, text);
+    setMemoItem(id, text);
+    setPermanent(id);
   }, []);
 
   return (
     <>
       <MemoView
         memoVisible={memoVisible}
-        currentMemo={currentMemo}
+        currentMemoId={currentMemoId}
         openMemo={openMemo}
         closeMemo={closeMemo}
         saveMemo={saveMemo}
         removeMemo={deleteMemoItem}
       />
-      <MemoController pickers={pickers} openMemo={openMemo} />
+      <MemoController openMemo={openMemo} />
     </>
   );
 }

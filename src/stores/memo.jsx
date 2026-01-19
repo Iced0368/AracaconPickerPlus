@@ -1,39 +1,30 @@
 import { create } from "zustand";
+import { LOCAL_STORAGE_MEMO_DATA } from "../core/constants/config";
 import GenericTable from "../utils/GenericTable";
 
-// Zustand 스토어 기본 구조 예시
 const useMemoStore = create((set) => {
-  const MEMO_DATA = "arcacon-memos";
-  let memoTable = new GenericTable("id", ["id", "imageUrl", "type", "poster", "orig", "text"]);
+  let memoTable = new GenericTable("id", ["id", "text"]);
 
   const saveMemoItems = (items) => {
-    localStorage.setItem(MEMO_DATA, JSON.stringify(items));
+    localStorage.setItem(LOCAL_STORAGE_MEMO_DATA, JSON.stringify(items));
     console.log("[ArcaconPickerPlus] Saved memo data");
   };
 
   const loadMemoItems = () => {
-    const data = localStorage.getItem(MEMO_DATA) || "[]";
+    const data = localStorage.getItem(LOCAL_STORAGE_MEMO_DATA) || "[]";
     console.log("[ArcaconPickerPlus] Loaded memo data");
     const arr = JSON.parse(data);
-    memoTable = new GenericTable("id", ["id", "imageUrl", "type", "poster", "orig", "text"], arr);
+    memoTable = new GenericTable("id", ["id", "text"], arr);
     set({ memoItems: memoTable.getAll() });
   };
 
-  const setMemoItem = (arcacon, text) => {
-    memoTable.insert({
-      id: arcacon.id,
-      imageUrl: arcacon.imageUrl,
-      type: arcacon.type,
-      poster: arcacon.poster,
-      orig: arcacon.orig,
-      text: text,
-    });
+  const setMemoItem = (id, text) => {
+    memoTable.insert({ id, text });
     saveMemoItems(memoTable.getAll());
     set({ memoItems: memoTable.getAll() });
   };
 
-  const deleteMemoItem = (rowOrId) => {
-    const id = typeof rowOrId === "object" && rowOrId !== null ? rowOrId.id : rowOrId;
+  const deleteMemoItem = (id) => {
     memoTable.delete(id);
     saveMemoItems(memoTable.getAll());
     set({ memoItems: memoTable.getAll() });
