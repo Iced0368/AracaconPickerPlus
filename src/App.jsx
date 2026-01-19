@@ -1,4 +1,4 @@
-import { ContentCollector, FavoriteModule, MemoModule, SearchModule, ThumbnailOverlay } from "./modules";
+import { ContentCollector, FavoriteModule, MemoModule, RecentModule, SearchModule, ThumbnailOverlay } from "./modules";
 
 function App() {
   return (
@@ -9,6 +9,7 @@ function App() {
       <FavoriteModule />
       <MemoModule />
       <SearchModule />
+      <RecentModule />
     </>
   );
 }
