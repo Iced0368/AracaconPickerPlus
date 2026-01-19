@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useEventListener } from "../../hooks";
-import useMemoStore from "../../stores/memo";
+import { useMemoStore } from "../../stores";
 
-export default function MemoController({ pickers, openMemo }) {
+export default function MemoController({ openMemo }) {
   const { loadMemoItems } = useMemoStore();
 
   const timerRef = useRef(null);
@@ -22,12 +22,7 @@ export default function MemoController({ pickers, openMemo }) {
       e.preventDefault();
 
       const id = target.getAttribute("data-attachment-id");
-      const imageUrl = target.getAttribute("data-src");
-      const type = target.getAttribute("data-type");
-      const poster = target.getAttribute("data-poster");
-      const orig = target.getAttribute("data-orig");
-
-      openMemo({ id, imageUrl, type, poster, orig });
+      openMemo(id);
     },
     document,
     true,
@@ -43,12 +38,13 @@ export default function MemoController({ pickers, openMemo }) {
         longPressEventRef.current = e;
 
         const id = target.getAttribute("data-attachment-id");
+        const emoticonid = target.getAttribute("data-emoticon-id");
         const imageUrl = target.getAttribute("data-src");
         const type = target.getAttribute("data-type");
         const poster = target.getAttribute("data-poster");
         const orig = target.getAttribute("data-orig");
 
-        openMemo({ id, imageUrl, type, poster, orig });
+        openMemo({ id, emoticonid, imageUrl, type, poster, orig });
       }, 500);
     },
     document,
