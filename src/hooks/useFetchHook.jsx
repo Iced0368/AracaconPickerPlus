@@ -16,8 +16,9 @@ function matchPattern(url, pattern) {
 
 function patchFetch() {
   if (isFetchPatched) return;
-  originalFetch = unsafeWindow.fetch;
-  unsafeWindow.fetch = async function (...args) {
+  const globalObj = typeof unsafeWindow !== "undefined" ? unsafeWindow : window;
+  originalFetch = globalObj.fetch;
+  globalObj.fetch = async function (...args) {
     const url = args[0]?.url || args[0];
     let result;
     for (const { pattern, callback } of fetchHookRegistry) {
