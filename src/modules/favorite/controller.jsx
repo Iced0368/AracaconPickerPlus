@@ -3,7 +3,7 @@ import useFavoriteStore from "../../stores/favorite";
 import { useEffect } from "react";
 
 export default function FavoriteController({ pickers, getToggleValue }) {
-  const { isFavorite, loadFavoriteItems, addFavoriteItem, removeFavoriteItem } = useFavoriteStore();
+  const { isFavorite, addFavoriteItem, removeFavoriteItem } = useFavoriteStore();
   const { setPermanent } = useArcaconStore();
 
   const handleClick = (uid) => (e) => {
@@ -24,10 +24,6 @@ export default function FavoriteController({ pickers, getToggleValue }) {
       }
     }
   };
-
-  useEffect(() => {
-    loadFavoriteItems();
-  }, []);
 
   useEffect(() => {
     const pickerListeners = pickers.map((picker) => {

@@ -1,55 +1,35 @@
 import { create } from "zustand";
-import { LOCAL_STORAGE_RECENT_DATA, MAX_RECENT_ITEMS } from "../core/constants/config";
+import { STORAGE_RECENT_DATA, MAX_RECENT_ITEMS } from "../core/constants/config";
+import { loadData, saveData } from "./persistent";
+import GenericTable from "../utils/GenericTable";
 
-// 최근 n개만 저장, 중복 데이터는 맨 뒤로 이동
-class FixedSizeQueue {
-  constructor(limit) {
-    this.limit = limit;
-    this.queue = [];
-  }
-  push(item) {
-    const idx = this.queue.findIndex((q) => q.id === item.id);
-    if (idx !== -1) {
-      this.queue.splice(idx, 1); // 기존 위치에서 제거
-    }
-    this.queue.push(item);
-    if (this.queue.length > this.limit) {
-      this.queue.shift();
-    }
-  }
-  get items() {
-    return this.queue;
-  }
-  clear() {
-    this.queue = [];
-  }
-}
+const useRecentStore = create(() => {
+  let recentTable = new GenericTable("id", ["id", "emoticonid", "timestamp"]);
 
-const useRecentStore = create((set) => {
-  const recentQueue = new FixedSizeQueue(MAX_RECENT_ITEMS);
-  const emoticonIdMap = new Map();
-
-  const loadRecentItems = () => {
-    const data = localStorage.getItem(LOCAL_STORAGE_RECENT_DATA) || "[]";
-    const items = JSON.parse(data);
-
-    items.forEach((item) => {
-      recentQueue.push(item);
-      emoticonIdMap.set(item.id, item);
-    });
-  };
+  const data = loadData(STORAGE_RECENT_DATA) || [];
+  data.forEach((item) => {
+    recentTable.insert(item);
+  });
 
   const addRecentItem = (item) => {
     if (item.emoticonid <= 0) return; // 유효하지 않은 이모티콘ID는 무시
-    recentQueue.push(item);
-    localStorage.setItem(LOCAL_STORAGE_RECENT_DATA, JSON.stringify(recentQueue.items));
-    set({});
+    item.timestamp = Date.now();
+    recentTable.insert(item);
+
+    // 최대 개수 초과 시 가장 오래된 항목 삭제
+    while (recentTable.getAll().length > MAX_RECENT_ITEMS) {
+      const oldestItem = recentTable.getAll().reduce((oldest, current) => {
+        return current.timestamp < oldest.timestamp ? current : oldest;
+      }, recentTable.getAll()[0]);
+      recentTable.delete(oldestItem.id);
+    }
+
+    saveData(STORAGE_RECENT_DATA, recentTable.getAll());
   };
 
   return {
-    loadRecentItems,
     addRecentItem,
-    getRecentById: (id) => emoticonIdMap.get(id),
+    getRecentById: (id) => recentTable.get(id),
   };
 });
 

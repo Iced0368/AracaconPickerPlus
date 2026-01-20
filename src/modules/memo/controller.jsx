@@ -3,14 +3,8 @@ import { useEventListener } from "../../hooks";
 import { useMemoStore } from "../../stores";
 
 export default function MemoController({ openMemo }) {
-  const { loadMemoItems } = useMemoStore();
-
   const timerRef = useRef(null);
   const longPressEventRef = useRef(null);
-
-  useEffect(() => {
-    loadMemoItems();
-  }, [loadMemoItems]);
 
   // .thumbnail-wrap에서 우클릭
   useEventListener(

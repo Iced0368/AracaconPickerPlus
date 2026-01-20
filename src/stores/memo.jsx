@@ -1,21 +1,18 @@
 import { create } from "zustand";
-import { LOCAL_STORAGE_MEMO_DATA } from "../core/constants/config";
+import { STORAGE_MEMO_DATA } from "../core/constants/config";
+import { loadData, saveData } from "./persistent";
+
 import GenericTable from "../utils/GenericTable";
 
 const useMemoStore = create((set) => {
   let memoTable = new GenericTable("id", ["id", "text"]);
 
-  const saveMemoItems = (items) => {
-    localStorage.setItem(LOCAL_STORAGE_MEMO_DATA, JSON.stringify(items));
-    console.log("[ArcaconPickerPlus] Saved memo data");
-  };
+  const data = loadData(STORAGE_MEMO_DATA) || [];
+  memoTable = new GenericTable("id", ["id", "text"], data);
 
-  const loadMemoItems = () => {
-    const data = localStorage.getItem(LOCAL_STORAGE_MEMO_DATA) || "[]";
-    console.log("[ArcaconPickerPlus] Loaded memo data");
-    const arr = JSON.parse(data);
-    memoTable = new GenericTable("id", ["id", "text"], arr);
-    set({ memoItems: memoTable.getAll() });
+  const saveMemoItems = (items) => {
+    saveData(STORAGE_MEMO_DATA, items);
+    console.log("[ArcaconPickerPlus] Saved memo data");
   };
 
   const setMemoItem = (id, text) => {
@@ -31,9 +28,8 @@ const useMemoStore = create((set) => {
   };
 
   return {
-    memoItems: [],
+    memoItems: memoTable.getAll(),
     getMemoById: (id) => memoTable.get(id),
-    loadMemoItems,
     setMemoItem,
     deleteMemoItem,
   };

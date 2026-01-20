@@ -5,7 +5,7 @@ import { useEventListener } from "../../hooks";
 // .arcaconPicker 요소를 감지해 store에 저장하는 컴포넌트
 export default function ContentCollector() {
   const { setArcaconPicker, setThumbnailWraps } = useElementStore();
-  const { loadArcaconPernamentItems, setArcaconItem } = useArcaconStore();
+  const { setArcaconItem } = useArcaconStore();
 
   const getChildElements = (picker) => {
     // 고유 id 부여
@@ -49,8 +49,6 @@ export default function ContentCollector() {
   );
 
   useEffect(() => {
-    loadArcaconPernamentItems();
-
     // MutationObserver로 동적 생성 감지
     const observer = new MutationObserver(() => {
       const pickers = document.querySelectorAll(".arcaconPicker");

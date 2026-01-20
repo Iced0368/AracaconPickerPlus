@@ -1,21 +1,19 @@
 import { create } from "zustand";
-import { LOCAL_STORAGE_FAVORITE_DATA } from "../core/constants/config";
+import { STORAGE_FAVORITE_DATA } from "../core/constants/config";
+import { loadData, saveData } from "./persistent";
+
 import GenericTable from "../utils/GenericTable";
 
 const useFavoriteStore = create((set) => {
   let favoriteTable = new GenericTable("id", ["id"]);
 
-  const saveFavoriteItems = (items) => {
-    localStorage.setItem(LOCAL_STORAGE_FAVORITE_DATA, JSON.stringify(items));
-    console.log("[ArcaconPickerPlus] Saved favorite data");
-  };
+  const data = loadData(STORAGE_FAVORITE_DATA) || [];
+  console.log("[ArcaconPickerPlus] Loaded favorite data");
+  favoriteTable = new GenericTable("id", ["id"], data);
 
-  const loadFavoriteItems = () => {
-    const data = localStorage.getItem(LOCAL_STORAGE_FAVORITE_DATA) || "[]";
-    console.log("[ArcaconPickerPlus] Loaded favorite data");
-    const arr = JSON.parse(data);
-    favoriteTable = new GenericTable("id", ["id"], arr);
-    set({ favorites: favoriteTable.getAll() });
+  const saveFavoriteItems = (items) => {
+    saveData(STORAGE_FAVORITE_DATA, items);
+    console.log("[ArcaconPickerPlus] Saved favorite data");
   };
 
   const addFavoriteItem = (id) => {
@@ -35,9 +33,8 @@ const useFavoriteStore = create((set) => {
   };
 
   return {
-    favorites: [],
+    favorites: favoriteTable.getAll(),
     isFavorite,
-    loadFavoriteItems,
     addFavoriteItem,
     removeFavoriteItem,
   };

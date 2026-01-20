@@ -3,12 +3,9 @@ import useFetchHook from "../../hooks/useFetchHook";
 import useRecentStore from "../../stores/recent";
 
 export default function RecentController() {
-  const { loadRecentItems, addRecentItem } = useRecentStore();
+  const { addRecentItem } = useRecentStore();
 
-  useEffect(() => {
-    loadRecentItems();
-  }, [loadRecentItems]);
-
+  // 아카콘/콤보콘 사용시 최근 사용 아카콘에 추가
   useFetchHook(/\/b\/([^/]+)\/\d+\/comment/, (args) => {
     const body = args[1]?.body;
 
