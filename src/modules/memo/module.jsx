@@ -21,14 +21,10 @@ export default function MemoModule() {
   }, [loadMemoItems]);
 
   // 메모 열기 (id 지정)
-  const openMemo = useCallback(
-    (id) => {
-      const memo = getMemoById(id);
-      setCurrentMemoId(id);
-      setMemoVisible(true);
-    },
-    [getMemoById],
-  );
+  const openMemo = useCallback((id) => {
+    setCurrentMemoId(id);
+    setMemoVisible(true);
+  }, []);
 
   // 메모 닫기
   const closeMemo = useCallback(() => {
