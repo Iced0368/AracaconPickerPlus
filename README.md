@@ -4,7 +4,7 @@
 
 ## 설치
 
-[https://update.greasyfork.org/scripts/563084/%EC%95%84%EC%B9%B4%EC%BD%98%20%ED%94%BD%EC%BB%A4%20%ED%94%8C%EB%9F%AC%EC%8A%A4%28Arcacon%20Picker%20Plus%29.user.js](https://update.greasyfork.org/scripts/563084/%EC%95%84%EC%B9%B4%EC%BD%98%20%ED%94%BD%EC%BB%A4%20%ED%94%8C%EB%9F%AC%EC%8A%A4%28Arcacon%20Picker%20Plus%29.user.js)
+https://update.greasyfork.org/scripts/563493/Arcacon%20Picker%20Plus.user.js
 
 ## 주요 기능
 
