@@ -5,15 +5,6 @@ const fetchHookRegistry = [];
 let isFetchPatched = false;
 let originalFetch = null;
 
-function matchPattern(url, pattern) {
-  if (typeof pattern === "string") {
-    return url === pattern;
-  } else if (pattern instanceof RegExp) {
-    return pattern.test(url);
-  }
-  return false;
-}
-
 function patchFetch() {
   if (isFetchPatched) return;
   const globalObj = typeof unsafeWindow !== "undefined" ? unsafeWindow : window;
