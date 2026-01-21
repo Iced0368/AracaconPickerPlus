@@ -1,42 +1,43 @@
 import { create } from "zustand";
 import { STORAGE_FAVORITE_DATA } from "../core/constants/config";
-import { loadData, saveData } from "./persistent";
+import { getDatabase, loadData, saveData, deleteData } from "./persistent";
 
 import GenericTable from "../utils/GenericTable";
+import { removeArcaconIfUnreferenced } from "./arcacon";
+
+const favoriteIDBTable = getDatabase(STORAGE_FAVORITE_DATA);
 
 const useFavoriteStore = create((set) => {
-  let favoriteTable = new GenericTable("id", ["id"]);
+  const favoriteTable = new GenericTable("id", ["id"]);
 
-  const data = loadData(STORAGE_FAVORITE_DATA) || [];
-  console.log("[ArcaconPickerPlus] Loaded favorite data");
-  favoriteTable = new GenericTable("id", ["id"], data);
+  async function loadFavoriteItems() {
+    const data = (await loadData(favoriteIDBTable)) || [];
+    favoriteTable.load(data);
+    set({ favorites: favoriteTable.getAll() });
 
-  const saveFavoriteItems = (items) => {
-    saveData(STORAGE_FAVORITE_DATA, items);
-    console.log("[ArcaconPickerPlus] Saved favorite data");
-  };
+    console.log("[ArcaconPickerPlus] Loaded favorite items: ", data.length, "items loaded.");
+  }
 
-  const addFavoriteItem = (id) => {
+  function addFavoriteItem(id) {
     favoriteTable.insert({ id });
-    saveFavoriteItems(favoriteTable.getAll());
+    saveData(favoriteIDBTable, { id });
     set({ favorites: favoriteTable.getAll() });
-  };
+  }
 
-  const removeFavoriteItem = (id) => {
+  function removeFavoriteItem(id) {
     favoriteTable.delete(id);
-    saveFavoriteItems(favoriteTable.getAll());
+    deleteData(favoriteIDBTable, id).then(() => {
+      removeArcaconIfUnreferenced(id);
+    });
     set({ favorites: favoriteTable.getAll() });
-  };
-
-  const isFavorite = (id) => {
-    return favoriteTable.get(id) !== null;
-  };
+  }
 
   return {
-    favorites: favoriteTable.getAll(),
-    isFavorite,
+    favorites: [],
+    loadFavoriteItems,
     addFavoriteItem,
     removeFavoriteItem,
+    isFavorite: (id) => favoriteTable.get(id) !== null,
   };
 });
 

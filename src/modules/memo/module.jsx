@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useArcaconStore, useMemoStore } from "../../stores";
 
 import MemoController from "./controller";
@@ -10,10 +10,15 @@ import MemoView from "./view";
 */
 
 export default function MemoModule() {
-  const { getMemoById, setMemoItem, deleteMemoItem } = useMemoStore();
+  const { loadMemoItems, getMemoById, setMemoItem, deleteMemoItem } = useMemoStore();
   const { setPermanent } = useArcaconStore();
+
   const [currentMemoId, setCurrentMemoId] = useState(null);
   const [memoVisible, setMemoVisible] = useState(false);
+
+  useEffect(() => {
+    loadMemoItems();
+  }, [loadMemoItems]);
 
   // 메모 열기 (id 지정)
   const openMemo = useCallback(

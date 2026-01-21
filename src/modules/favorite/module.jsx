@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useMultiState } from "../../hooks";
-import { useElementStore } from "../../stores";
+import { useElementStore, useFavoriteStore } from "../../stores";
 
 import FavoriteController from "./controller";
 import FavoriteView from "./view";
@@ -12,8 +12,13 @@ import FavoriteView from "./view";
 */
 
 export default function FavoriteModule() {
-  const { get: getToggle, set: setToggle, state: toggle } = useMultiState();
+  const { loadFavoriteItems } = useFavoriteStore();
   const { pickers } = useElementStore();
+  const { get: getToggle, set: setToggle, state: toggle } = useMultiState();
+
+  useEffect(() => {
+    loadFavoriteItems();
+  }, [loadFavoriteItems]);
 
   const toggleRef = useRef(toggle);
   useEffect(() => {

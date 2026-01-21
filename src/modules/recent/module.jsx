@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useRecentStore } from "../../stores";
 import RecentController from "./controller";
 import RecentView from "./view";
 
@@ -7,6 +9,12 @@ import RecentView from "./view";
   - 기존 최근 사용 아카콘은 비활성화
 */
 export default function RecentModule() {
+  const { loadRecentItems } = useRecentStore();
+
+  useEffect(() => {
+    loadRecentItems();
+  }, [loadRecentItems]);
+
   return (
     <>
       <RecentView />

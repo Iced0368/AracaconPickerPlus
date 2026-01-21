@@ -1,37 +1,43 @@
 import { create } from "zustand";
 import { STORAGE_MEMO_DATA } from "../core/constants/config";
-import { loadData, saveData } from "./persistent";
+import { getDatabase, loadData, saveData, deleteData } from "./persistent";
 
 import GenericTable from "../utils/GenericTable";
+import { removeArcaconIfUnreferenced } from "./arcacon";
+
+const memoIDBTable = getDatabase(STORAGE_MEMO_DATA);
 
 const useMemoStore = create((set) => {
-  let memoTable = new GenericTable("id", ["id", "text"]);
+  const memoTable = new GenericTable("id", ["id", "text"]);
 
-  const data = loadData(STORAGE_MEMO_DATA) || [];
-  memoTable = new GenericTable("id", ["id", "text"], data);
+  async function loadMemoItems() {
+    const data = (await loadData(memoIDBTable)) || [];
+    memoTable.load(data);
+    set({ memoItems: memoTable.getAll() });
 
-  const saveMemoItems = (items) => {
-    saveData(STORAGE_MEMO_DATA, items);
-    console.log("[ArcaconPickerPlus] Saved memo data");
-  };
+    console.log("[ArcaconPickerPlus] Loaded memo items: ", data.length, "items loaded.");
+  }
 
-  const setMemoItem = (id, text) => {
+  function setMemoItem(id, text) {
     memoTable.insert({ id, text });
-    saveMemoItems(memoTable.getAll());
+    saveData(memoIDBTable, { id, text });
     set({ memoItems: memoTable.getAll() });
-  };
+  }
 
-  const deleteMemoItem = (id) => {
+  function deleteMemoItem(id) {
     memoTable.delete(id);
-    saveMemoItems(memoTable.getAll());
+    deleteData(memoIDBTable, id).then(() => {
+      removeArcaconIfUnreferenced(id);
+    });
     set({ memoItems: memoTable.getAll() });
-  };
+  }
 
   return {
-    memoItems: memoTable.getAll(),
-    getMemoById: (id) => memoTable.get(id),
+    memoItems: [],
+    loadMemoItems,
     setMemoItem,
     deleteMemoItem,
+    getMemoById: (id) => memoTable.get(id),
   };
 });
 

@@ -1,18 +1,15 @@
 // GenericTable.js
 export default class GenericTable {
-  constructor(primaryKey, fields, rows = []) {
+  constructor(primaryKey, fields) {
     this.primaryKey = primaryKey; // 예: "id"
     this.fields = fields; // 예: ["id", "name", "memo"]
     this.rows = new Map(); // primaryKey -> row object
+  }
 
-    if (Array.isArray(rows)) {
-      for (const row of rows) {
-        const key = row[this.primaryKey];
-        if (key !== undefined) {
-          this.rows.set(key, { ...row });
-        }
-      }
-    }
+  load(dataArray) {
+    dataArray.forEach((row) => {
+      this.insert(row);
+    });
   }
 
   insert(row) {
