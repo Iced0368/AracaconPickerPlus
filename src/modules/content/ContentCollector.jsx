@@ -31,9 +31,7 @@ export default function ContentCollector() {
       type = thumb.getAttribute("data-type"),
       poster = thumb.getAttribute("data-poster"),
       orig = thumb.getAttribute("data-orig");
-    if (emoticonid > 0) {
-      setArcaconItem({ id, emoticonid, imageUrl, type, poster, orig }, false);
-    }
+    setArcaconItem({ id, emoticonid, imageUrl, type, poster, orig }, false);
   };
 
   useEventListener(
