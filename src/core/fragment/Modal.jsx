@@ -3,17 +3,16 @@ import { createPortal } from "react-dom";
 
 function Modal({ children, id, onClickBackground }) {
   // 클릭 후 배경에서 해제했을 때 닫히는 문제 방지
-  const downOnOverlay = useRef(false);
+  const downTarget = useRef(null);
 
   const handleMouseDown = (e) => {
-    downOnOverlay.current = true;
+    downTarget.current = e.target;
   };
 
   const handleMouseUp = (e) => {
-    if (e.target === e.currentTarget && downOnOverlay.current) {
+    if (e.currentTarget === e.target && downTarget.current === e.target) {
       onClickBackground();
     }
-    downOnOverlay.current = false;
   };
 
   return (
