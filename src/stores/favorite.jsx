@@ -22,6 +22,8 @@ const useFavoriteStore = create((set) => {
     favoriteTable.insert({ id });
     saveData(favoriteIDBTable, { id });
     set({ favorites: favoriteTable.getAll() });
+
+    console.log("[ArcaconPickerPlus] Added favorite: ", id);
   }
 
   function removeFavoriteItem(id) {
@@ -30,6 +32,8 @@ const useFavoriteStore = create((set) => {
       removeArcaconIfUnreferenced(id);
     });
     set({ favorites: favoriteTable.getAll() });
+
+    console.log("[ArcaconPickerPlus] Removed favorite: ", id);
   }
 
   return {

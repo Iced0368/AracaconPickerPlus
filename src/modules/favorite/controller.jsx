@@ -15,10 +15,8 @@ export default function FavoriteController({ pickers, getToggleValue }) {
       const id = target.getAttribute("data-attachment-id");
 
       if (isFavorite(id)) {
-        console.log("[ArcaconPickerPlus] Removing favorite: ", id);
         removeFavoriteItem(id);
       } else {
-        console.log("[ArcaconPickerPlus] Adding favorite: ", id);
         addFavoriteItem(id);
         setPermanent(id);
       }
