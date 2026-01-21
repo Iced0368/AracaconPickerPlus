@@ -19,7 +19,7 @@ export default function RecentController() {
       const emoticonid = parsed.emoticonId;
       addRecentItem(id, emoticonid);
     }
-    // 콤포콘
+    // 콤보콘
     else if (parsed.contentType === "combo_emoticon") {
       const combolist = JSON.parse(parsed.combolist).map((item) => ({ id: item[1], emoticonid: item[0] }));
       combolist.forEach(({ id, emoticonid }) => {
