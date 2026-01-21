@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { STORAGE_ARCACON_DATA, STORAGE_FAVORITE_DATA, STORAGE_MEMO_DATA } from "../core/constants/config";
 import { getDatabase, loadData, saveData, deleteData } from "./persistent";
 
-import GenericTable from "../utils/GenericTable";
+import { GenericTable } from "../core/utils";
 
 const arcaconIDBTable = getDatabase(STORAGE_ARCACON_DATA);
 const relatedIDBTable = [STORAGE_FAVORITE_DATA, STORAGE_MEMO_DATA].map(getDatabase);
@@ -33,7 +33,6 @@ const useArcaconStore = create(() => {
   }
 
   function setArcaconItem({ id, emoticonid, imageUrl, type, poster, orig }, permanent = false) {
-    if (emoticonid <= 0) return;
     const item = { id, emoticonid, imageUrl, type, poster, orig };
     if (permanent) {
       arcaconPernamentTable.insert(item);

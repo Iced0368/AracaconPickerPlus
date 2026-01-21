@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { STORAGE_MEMO_DATA } from "../core/constants/config";
 import { getDatabase, loadData, saveData, deleteData } from "./persistent";
 
-import GenericTable from "../utils/GenericTable";
+import GenericTable from "../core/utils/GenericTable";
 import { removeArcaconIfUnreferenced } from "./arcacon";
 
 const memoIDBTable = getDatabase(STORAGE_MEMO_DATA);
