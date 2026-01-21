@@ -55,8 +55,10 @@ const useArcaconStore = create(() => {
     }
   }
 
-  const getArcaconById = (id) => {
-    return arcaconPernamentTable.get(id) || arcaconTemporaryTable.get(id);
+  const getArcaconById = (id, permanentOnly = false) => {
+    return permanentOnly
+      ? arcaconPernamentTable.get(id)
+      : arcaconPernamentTable.get(id) || arcaconTemporaryTable.get(id);
   };
 
   return {
