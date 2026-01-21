@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { STORAGE_RECENT_DATA, MAX_RECENT_ITEMS } from "../core/constants/config";
 import { deleteData, getDatabase, loadData, saveData } from "./persistent";
-import GenericTable from "../utils/GenericTable";
+import { GenericTable } from "../core/utils";
 
 const recentIDBTable = getDatabase(STORAGE_RECENT_DATA);
 
@@ -16,7 +16,6 @@ const useRecentStore = create(() => {
   }
 
   function addRecentItem(id, emoticonid) {
-    if (emoticonid <= 0) return; // 유효하지 않은 이모티콘ID는 무시
     const item = { id, emoticonid, timestamp: Date.now() };
     recentTable.insert(item);
 
