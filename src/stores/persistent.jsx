@@ -1,17 +1,11 @@
 import Dexie from "dexie";
-import {
-  STORAGE_ARCACON_DATA,
-  STORAGE_FAVORITE_DATA,
-  STORAGE_MEMO_DATA,
-  STORAGE_RECENT_DATA,
-} from "../core/constants/config";
+import { STORAGE_ARCACON_DATA, STORAGE_FAVORITE_DATA, STORAGE_MEMO_DATA } from "../core/constants/config";
 
 const db = new Dexie("ArcaconPickerPlusDB");
 db.version(1).stores({
   [STORAGE_ARCACON_DATA]: "id,emoticonid,imageUrl,type,poster,orig",
   [STORAGE_FAVORITE_DATA]: "id",
   [STORAGE_MEMO_DATA]: "id,text",
-  [STORAGE_RECENT_DATA]: "id,emoticonid,timestamp",
 });
 
 export function getDatabase(tableName) {
