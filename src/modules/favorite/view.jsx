@@ -1,6 +1,6 @@
 import { FirstChildPortal, PackageContent, PackageItem } from "../../core/fragment";
 import { FAVORITE_PACKAGE_ID } from "../../core/constants/config";
-import { useElementStore } from "../../stores";
+import { useArcaconStore, useElementStore } from "../../stores";
 import { createPortal } from "react-dom";
 import { getOverlay } from "../content/ThumbnailOverlay";
 
@@ -18,6 +18,7 @@ const STAR_SVG_DATA_URL =
 export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }) {
   const { favorites, isFavorite } = useFavoriteStore();
   const { thumbnailWraps } = useElementStore();
+  const { getArcaconById } = useArcaconStore();
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
                 className="--package-wrap"
                 data-package-id={FAVORITE_PACKAGE_ID}
               >
-                <PackageContent items={favorites} title="즐겨찾기" />
+                <PackageContent items={favorites.map((fav) => getArcaconById(fav.id))} title="즐겨찾기" />
               </FirstChildPortal>
             ),
         )

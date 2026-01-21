@@ -1,4 +1,4 @@
-import { useElementStore, useMemoStore } from "../../stores";
+import { useArcaconStore, useElementStore, useMemoStore } from "../../stores";
 import { FirstChildPortal, PackageContent } from "../../core/fragment";
 import { useDebounce } from "../../hooks";
 import { SERACH_PACKAGE_ID } from "../../core/constants/config";
@@ -8,6 +8,7 @@ import SearchInputFragment from "./fragment/SearchInputFragment";
 export default function SearchView({ getInputValue, setInputValue, keyword, getKeyword, setKeyword }) {
   const { pickers } = useElementStore();
   const { memoItems } = useMemoStore();
+  const { getArcaconById } = useArcaconStore();
 
   const updateKeyword = useDebounce(setKeyword, 300);
 
@@ -54,7 +55,7 @@ export default function SearchView({ getInputValue, setInputValue, keyword, getK
               <PackageContent
                 id={SERACH_PACKAGE_ID}
                 title={`검색 결과: ${kw}, 총 ${searchResult.length}개`}
-                items={searchResult}
+                items={searchResult.map((item) => getArcaconById(item.id))}
               />
             </FirstChildPortal>
           );

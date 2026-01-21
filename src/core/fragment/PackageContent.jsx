@@ -1,13 +1,9 @@
-import { useArcaconStore } from "../../stores";
-
 export default function PackageContent({ title, items }) {
-  const { getArcaconById } = useArcaconStore();
   return (
     <>
       <span className="package-title">{title}</span>
       <div className="thumbnails">
-        {items.map((item) => {
-          const fav = getArcaconById(item.id);
+        {items.map((fav) => {
           return fav ? (
             <div
               key={`thumbnail-wrap-favorite-${fav.id}`}

@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import useFetchHook from "../../hooks/useFetchHook";
+import { useFetchHook } from "../../hooks";
 import useRecentStore from "../../stores/recent";
 
 export default function RecentController() {
@@ -18,13 +17,13 @@ export default function RecentController() {
     if (parsed.contentType === "emoticon") {
       const id = parsed.attachmentId;
       const emoticonid = parsed.emoticonId;
-      addRecentItem({ id, emoticonid });
+      addRecentItem(id, emoticonid);
     }
     // 콤포콘
     else if (parsed.contentType === "combo_emoticon") {
       const combolist = JSON.parse(parsed.combolist).map((item) => ({ id: item[1], emoticonid: item[0] }));
       combolist.forEach(({ id, emoticonid }) => {
-        addRecentItem({ id, emoticonid });
+        addRecentItem(id, emoticonid);
       });
     }
 
