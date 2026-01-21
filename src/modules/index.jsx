@@ -2,6 +2,6 @@ import { ContentCollector, ThumbnailOverlay, getOverlay } from "./content";
 import FavoriteModule from "./favorite/module";
 import MemoModule from "./memo/module";
 import SearchModule from "./search/module";
-import RecentModule from "./recent/module";
+import FixerModule from "./fixer/module";
 
-export { ContentCollector, ThumbnailOverlay, getOverlay, FavoriteModule, MemoModule, SearchModule, RecentModule };
+export { ContentCollector, ThumbnailOverlay, getOverlay, FavoriteModule, MemoModule, SearchModule, FixerModule };

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 // 전역 콜백 레지스트리
 const fetchHookRegistry = [];
 let isFetchPatched = false;
-let originalFetch = null;
+export let originalFetch = null;
 
 function patchFetch() {
   if (isFetchPatched) return;
