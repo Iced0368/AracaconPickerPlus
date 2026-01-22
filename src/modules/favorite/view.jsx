@@ -1,4 +1,4 @@
-import { FirstChildPortal, PackageContent, PackageItem } from "../../core/fragment";
+import { PackageContent, PackageItem } from "../../core/fragment";
 import { FAVORITE_PACKAGE_ID } from "../../core/constants/config";
 import { useArcaconStore, useElementStore } from "../../stores";
 import { createPortal } from "react-dom";
@@ -8,6 +8,7 @@ import FavoriteIcon from "../../assets/favorite-icon.svg?react";
 
 import "./arcacon-favorite-icon.css";
 import useFavoriteStore from "../../stores/favorite";
+import { PortalAhead } from "../../core/utils";
 
 const STAR_SVG_DATA_URL =
   "data:image/svg+xml;utf8," +
@@ -26,15 +27,15 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
         // 아카콘 패키지 선택 버튼
         pickers.map(
           (picker) =>
-            picker.content && (
-              <FirstChildPortal
+            picker.content?.firstChild && (
+              <PortalAhead
                 key={`content-${picker.uid}`}
-                container={picker.content}
+                target={picker.content.firstChild}
                 className="--package-wrap"
                 data-package-id={FAVORITE_PACKAGE_ID}
               >
                 <PackageContent items={favorites.map((fav) => getArcaconById(fav.id))} title="즐겨찾기" />
-              </FirstChildPortal>
+              </PortalAhead>
             ),
         )
       }
@@ -42,17 +43,17 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
         // 아카콘 패키지 아이템 표시
         pickers.map(
           (picker) =>
-            picker.sidebar && (
-              <FirstChildPortal
+            picker.sidebar?.firstChild && (
+              <PortalAhead
                 key={`item-${picker.uid}`}
-                container={picker.sidebar}
+                target={picker.sidebar.firstChild}
                 className="package-item"
                 data-package-id={FAVORITE_PACKAGE_ID}
                 data-package-name="즐겨찾기"
                 title="즐겨찾기"
               >
                 <PackageItem id={FAVORITE_PACKAGE_ID} title="즐겨찾기" imgUrl={STAR_SVG_DATA_URL} />
-              </FirstChildPortal>
+              </PortalAhead>
             ),
         )
       }
@@ -60,11 +61,11 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
         // 즐겨찾기 토글 버튼 표시
         pickers.map(
           (picker) =>
-            picker.optionsToolbar && (
-              <FirstChildPortal
+            picker.optionsToolbar?.firstChild && (
+              <PortalAhead
                 fragment="label"
                 key={`toggle-${picker.uid}`}
-                container={picker.optionsToolbar}
+                target={picker.optionsToolbar.firstChild}
                 className="option-combo-emoticon visible"
                 id="favorite-toggle-button"
               >
@@ -75,7 +76,7 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
                   checked={getToggleValue(picker.uid) || false}
                   onChange={() => toggleFavorite(picker.uid)}
                 />
-              </FirstChildPortal>
+              </PortalAhead>
             ),
         )
       }

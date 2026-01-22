@@ -1,9 +1,11 @@
 import { useArcaconStore, useElementStore, useMemoStore } from "../../stores";
-import { FirstChildPortal, PackageContent } from "../../core/fragment";
+import { PackageContent } from "../../core/fragment";
 import { useDebounce } from "../../hooks";
 import { SERACH_PACKAGE_ID } from "../../core/constants/config";
 
 import SearchInputFragment from "./fragment/SearchInputFragment";
+import { PortalAhead } from "../../core/utils";
+import { createPortal } from "react-dom";
 
 export default function SearchView({ getInputValue, setInputValue, keyword, getKeyword, setKeyword }) {
   const { pickers } = useElementStore();
@@ -19,11 +21,7 @@ export default function SearchView({ getInputValue, setInputValue, keyword, getK
         if (!node) return null;
 
         return (
-          <FirstChildPortal
-            key={`arcacon-search-${picker.uid}`}
-            className="arcacon-search-input-container"
-            container={node}
-          >
+          <PortalAhead key={`arcacon-search-${picker.uid}`} className="arcacon-search-input-container" target={node}>
             <SearchInputFragment
               value={getInputValue(picker.uid)}
               onChange={(e) => {
@@ -32,7 +30,7 @@ export default function SearchView({ getInputValue, setInputValue, keyword, getK
                 updateKeyword(picker.uid, value);
               }}
             />
-          </FirstChildPortal>
+          </PortalAhead>
         );
       })}
       {
@@ -45,19 +43,16 @@ export default function SearchView({ getInputValue, setInputValue, keyword, getK
           picker.content.classList.add("search-only");
 
           const searchResult = memoItems.reduce((acc, item) => (item.text.includes(kw) ? [...acc, item] : acc), []);
-          return (
-            <FirstChildPortal
-              container={picker.content}
-              className="--package-wrap"
-              data-package-id={SERACH_PACKAGE_ID}
-              key={`arcacon-search-result-${uid}`}
-            >
+
+          return createPortal(
+            <div className="--package-wrap" data-package-id={SERACH_PACKAGE_ID} key={`arcacon-search-result-${uid}`}>
               <PackageContent
                 id={SERACH_PACKAGE_ID}
                 title={`검색 결과: ${kw}, 총 ${searchResult.length}개`}
                 items={searchResult.map((item) => getArcaconById(item.id))}
               />
-            </FirstChildPortal>
+            </div>,
+            picker.content,
           );
         })
       }
