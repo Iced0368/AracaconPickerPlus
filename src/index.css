@@ -30,3 +30,18 @@
 .content.search-only > .--package-wrap[data-package-id]:not([data-package-id="-2"]) {
   display: none;
 }
+
+.arcaconPicker .title-area {
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.arcaconPicker .title-area > :first-child {
+  margin-right: auto;
+}
+
+.options-toolbar {
+  margin-left: 20px;
+}

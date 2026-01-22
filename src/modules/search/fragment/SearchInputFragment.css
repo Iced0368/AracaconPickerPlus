@@ -20,13 +20,18 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin-right: 20px;
-  height: 40px;
+  height: 35px;
+  width: 350px;
   gap: 8px;
 }
 
+.arcacon-search-input-container > span {
+  white-space: nowrap;
+}
+
 .arcacon-search-input {
-  height: 85% !important;
+  flex: 1;
+  height: 30px;
   padding: 8px 12px 8px 12px;
   padding-right: 28px;
   font-size: 15px;
