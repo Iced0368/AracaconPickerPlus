@@ -1,0 +1,30 @@
+.microModal > div div[role="input"] {
+  width: 320px;
+  padding: 2em;
+  border-radius: 16px;
+  box-shadow: 0 -3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: var(--color-modal-bg);
+  border: 2px solid var(--color-modal-bd);
+}
+
+@media screen and (orientation: portrait) and (max-width: 576px) {
+  .microModal > div div[role="input"] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    animation-name: microModalSlideDownMobile;
+    animation-duration: 0.3s;
+  }
+}
+
+@keyframes microModalSlideDownMobile {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

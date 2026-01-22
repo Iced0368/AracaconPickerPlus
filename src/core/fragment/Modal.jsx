@@ -1,5 +1,7 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
+
+import "./Modal.css";
 
 function Modal({ children, id, onClickBackground }) {
   // 클릭 후 배경에서 해제했을 때 닫히는 문제 방지
@@ -18,7 +20,7 @@ function Modal({ children, id, onClickBackground }) {
   return (
     <div className="microModal is-open is-last" aria-hidden="false" id={`modal_${id}`}>
       <div tabIndex="-1" onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
-        <div role="dialog" className="arca-dialog" aria-modal="true">
+        <div role="input" className="arca-dialog" aria-modal="true">
           {children}
         </div>
       </div>
