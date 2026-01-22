@@ -10,8 +10,6 @@ export default function MemoController({ openMemo }) {
   useEventListener(
     "contextmenu",
     (e) => {
-      console.log(e);
-      if (e.button !== 2) return; // 우클릭만 허용
       const target = e.target.closest(".thumbnail-wrap");
       if (!target) return;
       e.preventDefault();
