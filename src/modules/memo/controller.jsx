@@ -24,8 +24,9 @@ export default function MemoController({ openMemo }) {
 
   // 터치 롱프레스 (모바일)
   useEventListener(
-    "touchstart",
+    "pointerdown",
     (e) => {
+      console.log("pointerdown detected");
       const target = e.target.closest(".thumbnail-wrap");
       if (!target) return;
       timerRef.current = setTimeout(() => {
@@ -42,24 +43,12 @@ export default function MemoController({ openMemo }) {
       }, 500);
     },
     document,
-    true,
+    { passive: true },
   );
   useEventListener(
-    "touchend",
+    "pointerup",
     (e) => {
-      clearTimeout(timerRef.current);
-      if (longPressEventRef.current) {
-        e.preventDefault();
-        e.stopPropagation();
-        longPressEventRef.current = null;
-      }
-    },
-    document,
-    true,
-  );
-  useEventListener(
-    "touchcancel",
-    (e) => {
+      console.log("pointerup detected");
       clearTimeout(timerRef.current);
       if (longPressEventRef.current) {
         e.preventDefault();
