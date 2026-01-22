@@ -10,6 +10,7 @@ export default function MemoController({ openMemo }) {
   useEventListener(
     "contextmenu",
     (e) => {
+      console.log(e);
       if (e.button !== 2) return; // 우클릭만 허용
       const target = e.target.closest(".thumbnail-wrap");
       if (!target) return;
@@ -26,29 +27,20 @@ export default function MemoController({ openMemo }) {
   useEventListener(
     "pointerdown",
     (e) => {
-      console.log("pointerdown detected");
       const target = e.target.closest(".thumbnail-wrap");
       if (!target) return;
       timerRef.current = setTimeout(() => {
         longPressEventRef.current = e;
-
         const id = target.getAttribute("data-attachment-id");
-        const emoticonid = target.getAttribute("data-emoticon-id");
-        const imageUrl = target.getAttribute("data-src");
-        const type = target.getAttribute("data-type");
-        const poster = target.getAttribute("data-poster");
-        const orig = target.getAttribute("data-orig");
-
-        openMemo({ id, emoticonid, imageUrl, type, poster, orig });
+        openMemo(id);
       }, 500);
     },
     document,
-    { passive: true },
+    true,
   );
   useEventListener(
     "pointerup",
     (e) => {
-      console.log("pointerup detected");
       clearTimeout(timerRef.current);
       if (longPressEventRef.current) {
         e.preventDefault();
