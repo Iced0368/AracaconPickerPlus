@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import "./MemoFragment.css";
 
 import DeleteIcon from "../../../assets/delete-icon.svg?react";
