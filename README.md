@@ -4,7 +4,7 @@
 
 ## 설치
 
-https://github.com/Iced0368/AracaconPickerPlus/releases/download/v1.0.0/arcacon-picker-plus.user.js
+https://github.com/Iced0368/AracaconPickerPlus/releases/latest/download/arcacon-picker-plus.user.js
 
 ## 주요 기능
 
