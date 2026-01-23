@@ -12,6 +12,7 @@ function Modal({ children, id, onClickBackground }) {
   };
 
   const handleMouseUp = (e) => {
+    e.stopPropagation();
     if (e.currentTarget === e.target && downTarget.current === e.target) {
       onClickBackground();
     }
