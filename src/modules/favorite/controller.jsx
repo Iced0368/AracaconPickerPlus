@@ -1,24 +1,14 @@
-import { useArcaconStore } from "../../stores";
-import useFavoriteStore from "../../stores/favorite";
 import { useEffect } from "react";
 
-export default function FavoriteController({ pickers, getToggleValue }) {
-  const { isFavorite, addFavoriteItem, removeFavoriteItem } = useFavoriteStore();
-  const { setPermanent } = useArcaconStore();
-
+export default function FavoriteController({ pickers, getToggleValue, onClickFavorite }) {
   const handleClick = (uid) => (e) => {
     const target = e.target.closest(".thumbnail-wrap");
-
-    if (target && getToggleValue(uid)) {
-      e.stopPropagation();
-
+    if (target) {
       const id = target.getAttribute("data-attachment-id");
-
-      if (isFavorite(id)) {
-        removeFavoriteItem(id);
-      } else {
-        addFavoriteItem(id);
-        setPermanent(id);
+      const toggleOn = !!getToggleValue(uid);
+      if (toggleOn) {
+        e.stopPropagation();
+        onClickFavorite(id, true); // 토글이 on인 상태 전달
       }
     }
   };

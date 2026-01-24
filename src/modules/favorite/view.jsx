@@ -1,4 +1,4 @@
-import { PackageContent, PackageItem } from "../../core/fragment";
+import { Modal, PackageContent, PackageItem } from "../../core/fragment";
 import { FAVORITE_PACKAGE_ID } from "../../core/constants/config";
 import { useArcaconStore, useElementStore } from "../../stores";
 import { createPortal } from "react-dom";
@@ -16,7 +16,14 @@ const STAR_SVG_DATA_URL =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="#FFD600"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>',
   );
 
-export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }) {
+export default function FavoriteView({
+  pickers,
+  getToggleValue,
+  toggleFavorite,
+  showFavoriteModal,
+  onModalConfirm,
+  onModalCancel,
+}) {
   const { favorites, isFavorite } = useFavoriteStore();
   const { thumbnailWraps } = useElementStore();
   const { getArcaconById } = useArcaconStore();
@@ -96,6 +103,22 @@ export default function FavoriteView({ pickers, getToggleValue, toggleFavorite }
             overlay,
           );
         })
+      }
+      {
+        // 즐겨찾기 클릭 시 1회 노출 모달
+        showFavoriteModal && (
+          <Modal>
+            <Modal.Title>확인</Modal.Title>
+            <Modal.Content>
+              <div>즐겨찾기를 제거하시겠습니까?</div>
+              <div>이 창은 한 번만 표시됩니다.</div>
+            </Modal.Content>
+            <Modal.Buttons>
+              <button onClick={onModalConfirm}>확인</button>
+              <button onClick={onModalCancel}>취소</button>
+            </Modal.Buttons>
+          </Modal>
+        )
       }
     </>
   );
