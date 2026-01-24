@@ -37,9 +37,9 @@ export default function SearchView({ getInputValue, setInputValue, keyword, getK
         // 검색어 유무에 따라 콘텐츠 표시 여부 제어
         Object.entries(keyword).map(([uid, kw]) => {
           const picker = pickers.find((p) => p.uid === uid);
+          if (!picker?.content) return null;
           picker.content.classList.remove("search-only");
           if (!kw) return null;
-          if (!picker) return null;
           picker.content.classList.add("search-only");
 
           const searchResult = memoItems.reduce((acc, item) => (item.text.includes(kw) ? [...acc, item] : acc), []);
