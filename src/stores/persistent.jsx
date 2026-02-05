@@ -16,6 +16,11 @@ export async function saveData(dbTable, item) {
   await dbTable.put(item);
 }
 
+export async function batchSaveData(dbTable, items) {
+  if (!Array.isArray(items)) throw new Error("items must be an array");
+  await dbTable.bulkPut(items);
+}
+
 export async function loadData(dbTable) {
   return await dbTable.toArray();
 }
