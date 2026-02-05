@@ -18,12 +18,6 @@ export default class GenericTable {
     this.rows.set(key, { ...row });
   }
 
-  update(key, updates) {
-    if (!this.rows.has(key)) return false;
-    this.rows.set(key, { ...this.rows.get(key), ...updates });
-    return true;
-  }
-
   delete(key) {
     return this.rows.delete(key);
   }
