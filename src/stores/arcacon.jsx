@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { STORAGE_ARCACON_DATA, STORAGE_FAVORITE_DATA, STORAGE_MEMO_DATA } from "../core/constants/config";
-import { getDatabase, loadData, saveData, deleteData } from "./persistent";
+import { getDatabase, loadData, saveData, deleteData, batchSaveData } from "./persistent";
 
 import { GenericTable } from "../core/utils";
 
@@ -28,6 +28,61 @@ const useArcaconStore = create(() => {
   async function loadArcaconItems() {
     const data = (await loadData(arcaconIDBTable)) || [];
     arcaconPernamentTable.load(data);
+
+    // 만료된 아카콘 아이템을 확인하고 갱신 요청
+    // expires 파라미터 추출용 정규식
+    const expiresRegex = /[?&]expires=(\d+)/;
+    const now = Math.floor(Date.now() / 1000);
+    const expiredEmoticonIds = new Set();
+
+    data.forEach((item) => {
+      const urls = [item.imageUrl, item.orig, item.poster];
+      for (const url of urls) {
+        if (typeof url === "string") {
+          const match = url.match(expiresRegex);
+          if (match) {
+            const expires = parseInt(match[1], 10);
+            if (expires < now) {
+              if (item.emoticonid) expiredEmoticonIds.add(item.emoticonid);
+              break; // 하나라도 만료면 체크
+            }
+          }
+        }
+      }
+    });
+
+    console.log(expiredEmoticonIds);
+
+    const arcaconIds = new Set(data.map((item) => item.id.toString()));
+    const arcaconToRefresh = [];
+
+    await Promise.all(
+      Array.from(expiredEmoticonIds).map((emoticonid) => {
+        if (emoticonid <= 0) return;
+        return fetch(`/api/emoticon2/${emoticonid}`)
+          .then((response) => response.json())
+          .then((emoticonData) => {
+            emoticonData.forEach((arcacon) => {
+              if (arcaconIds.has(arcacon.id.toString())) {
+                arcaconToRefresh.push({ ...arcacon, id: arcacon.id.toString() });
+              }
+            });
+          })
+          .catch((error) => {
+            console.error("[ArcaconPickerPlus] Failed to refresh arcacon item: ", emoticonid, error);
+          });
+      }),
+    );
+
+    console.log("[ArcaconPickerPlus] Expired arcacon items to refresh: ", arcaconToRefresh.length);
+    if (arcaconToRefresh.length > 0) {
+      await batchSaveData(arcaconIDBTable, arcaconToRefresh);
+
+      // 갱신된 아이템을 영구 테이블에도 반영
+      arcaconToRefresh.forEach((item) => {
+        arcaconPernamentTable.insert(item);
+      });
+    }
 
     console.log("[ArcaconPickerPlus] Loaded arcacon items: ", data.length, "items loaded.");
   }
