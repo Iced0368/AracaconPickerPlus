@@ -51,8 +51,6 @@ const useArcaconStore = create(() => {
       }
     });
 
-    console.log(expiredEmoticonIds);
-
     const arcaconIds = new Set(data.map((item) => item.id.toString()));
     const arcaconToRefresh = [];
 
