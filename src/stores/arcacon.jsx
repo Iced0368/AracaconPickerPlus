@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { STORAGE_ARCACON_DATA, STORAGE_FAVORITE_DATA, STORAGE_MEMO_DATA } from "../core/constants/config";
 import { getDatabase, loadData, saveData, deleteData, batchSaveData } from "./persistent";
 
-import { GenericTable } from "../core/utils";
+import { GenericTable, getEmoticonId } from "../core/utils";
 
 const arcaconIDBTable = getDatabase(STORAGE_ARCACON_DATA);
 const relatedIDBTable = [STORAGE_FAVORITE_DATA, STORAGE_MEMO_DATA].map(getDatabase);
@@ -62,7 +62,7 @@ const useArcaconStore = create(() => {
           .then((emoticonData) => {
             emoticonData.forEach((arcacon) => {
               if (arcaconIds.has(arcacon.id.toString())) {
-                arcaconToRefresh.push({ ...arcacon, id: arcacon.id.toString() });
+                arcaconToRefresh.push({ ...arcacon, emoticonid: emoticonid.toString() });
               }
             });
           })
@@ -85,9 +85,13 @@ const useArcaconStore = create(() => {
     console.log("[ArcaconPickerPlus] Loaded arcacon items: ", data.length, "items loaded.");
   }
 
-  function setArcaconItem({ id, emoticonid, imageUrl, type, poster, orig }, permanent = false) {
+  async function setArcaconItem({ id, emoticonid, imageUrl, type, poster, orig }, permanent = false) {
     const item = { id, emoticonid, imageUrl, type, poster, orig };
+
     if (permanent) {
+      if (item.emoticonid <= 0) {
+        item.emoticonid = await getEmoticonId(id);
+      }
       arcaconPernamentTable.insert(item);
       saveData(arcaconIDBTable, item);
     } else {
@@ -100,7 +104,7 @@ const useArcaconStore = create(() => {
     deleteData(arcaconIDBTable, id);
   }
 
-  function setPermanent(id) {
+  async function setPermanent(id) {
     const item = arcaconTemporaryTable.get(id);
     if (item) {
       console.log("[ArcaconPickerPlus] Setting arcacon item as permanent: ", id);
